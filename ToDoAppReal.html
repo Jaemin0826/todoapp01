@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+
+    <script 
+    src="https://code.jquery.com/jquery-3.7.1.min.js" 
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" 
+    crossorigin="anonymous">
+    </script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap" rel="stylesheet">
+
+<style>
+    *{
+        box-sizing: border-box;
+        padding: 0;
+        margin: 0;
+        font-family: "Noto Serif KR", serif;
+    }
+
+    body{
+        background-color: #f3f3f3;
+    }
+
+    .Back{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #242424;
+        width: 100vw;
+        height: 100vh;
+        transition: all ease 1s;
+    }
+
+    #title{
+        font-weight: bold;
+        font-size: 64px;
+        color: #ffffff;
+        margin-bottom: 2vh;
+        transition: all ease 0.1s;
+    }
+
+    .con{
+        flex-direction: column;
+        display: none;  
+    }
+
+    .conA{
+        background-color: #ffffff;
+        padding: 20px;
+        margin: 4px;
+        border-radius: 10px;
+        box-shadow: 0 3px 3px rgba(163, 163, 163, 0.1), 0 3px 3px rgba(0,0,0,0.23);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .conA input{
+        background-color: #f3f3f3;
+        font-size: 15px;
+        color: #434343;
+        width: 75%;
+        border: none;
+        padding: 10px 10px;
+        border-radius: 4px;
+    }
+
+    .conA button{
+        background-color: #3474ff;
+        color: #ffffff;
+        padding: 11px 10px;
+        border-radius: 4px;
+        border: none;
+        font-weight: bold;
+        width: 23%;
+    }
+
+    .conC{
+        background-color: #ffffff;
+        padding: 20px;
+        margin: 4px;
+        border-radius: 10px;
+        box-shadow: 0 3px 3px rgba(163, 163, 163, 0.1), 0 3px 3px rgba(0,0,0,0.23);
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    #delete{
+        background-color: #f3f3f3;
+        color: #434343;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 4px;
+        border: none;
+        width: 66%;
+    }
+
+    #delete:hover{
+        background-color: #3474ff;
+        color: #ffffff;
+    }
+
+    #deleteAll{
+        background-color: #434343;
+        color: #ffffff;
+        font-weight: bold;
+        padding: 10px;
+        border-radius: 4px;
+        border: none;
+        width: 32%;
+    }
+
+    #Start{
+        background-color: #3474ff;
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 10px 40px;
+        border-radius: 4px;
+        border: none;
+    }
+
+    button:hover{
+        scale: 1.05;
+        transition: all ease 0.2s;
+    }
+
+    #deleteAll:hover{
+        background-color: #ff4040;
+    }
+
+    .conB{
+        background-color: #ffffff;
+        padding: 20px;
+        margin: 4px;
+        border-radius: 10px;
+        box-shadow: 0 3px 3px rgba(163, 163, 163, 0.1), 0 3px 3px rgba(0,0,0,0.23);
+        height: 40vh;
+        overflow: scroll;
+        scrollbar-width: none;
+    }
+
+    .conB p,ul{
+        padding: 8px;
+    }
+
+    .conB p{
+        font-size: 14px;
+        color: #434343;
+    }
+
+    ul{
+        list-style: none;
+
+    }
+
+    li{
+        padding: 8px;
+        position: relative;
+        transition: all ease 0.3s;
+        cursor: pointer;
+        border-bottom: 2px solid #d9d9d9;
+    }
+
+    li:hover{
+        background-color: #f3f3f3;
+    }
+
+    li .remove{
+        display: none;
+        position: absolute;
+        right: 10px;
+        transition: all ease 0.3s;
+        cursor: pointer;
+    }
+
+    li:hover .remove{
+        display: inline;
+    }
+
+    .line-through {
+        text-decoration: line-through;
+        background-color: #f5f5f5;
+    }
+
+    .warning{
+        position: absolute;
+        padding: 20px 50px 10px 50px;
+        background-color: #242424;
+        box-shadow: 0 3px 3px rgba(163, 163, 163, 0.1), 0 3px 3px rgba(0,0,0,0.23);
+        border-radius: 10px;
+        text-align: center;
+        color: #ffffff;
+
+        display: none;
+    }
+
+    #warntitle{
+        margin-bottom: 10px;
+    }
+
+    .warning p{
+        font-size: 14px;
+        margin-bottom: 12px;
+        border-bottom: 1px solid #4e4e4e;
+        padding-bottom: 12px;
+    }
+
+    .warnbox{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .warning button{
+        width: 48%;
+        font-weight: bold;
+        padding: 4px 0px;
+        border: none;
+        border-radius: 4px;
+    }
+
+    #warnyes {
+        background-color: #ff4040;
+        color: #ffffff;
+    }
+
+
+</style>
+</head>
+
+<body>
+
+    <div class="Back">
+
+        <h1 id="title">ToDoApp</h1>
+
+        <button id="Start">시작하기</button>
+
+        <div class="con">
+
+            <div class="conA">
+                <input id="taskInput" type="text" placeholder="할일을 적어주세요.">
+                <button id="add">등록</button>
+            </div>
+
+            <div class="conB">
+                <p>오늘의 할일</p>
+                <ul id="list">
+                </ul>
+            </div>
+
+            <div class="conC">
+                <button id="delete">해치운일 지우기 ✔</button>
+                <button id="deleteAll">전부 지우기</button>
+
+            </div>
+        </div>
+
+        <div class="warning">
+            <h2 id="warntitle">진짜요..?</h2>
+            <p>모든 할일이 삭제됩니다.<br>정말 <b>삭제</b>하시겠습니까?</p>
+            <div class="warnbox">
+                <button id="warnyes">삭제</button>
+                <button id="warnno">돌아가기</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    $(document).ready(function(){
+
+        $('#Start').click(function(){
+            $('.con').slideDown(1000);
+            $('#Start').css('display','none');
+            $('.Back').css('background-color','#f3f3f3');
+            $('#title').css('display', 'none');
+        });
+
+        function addTask() {
+            var task = $('#taskInput').val();
+            if (task.trim() !== "") {
+                $('#list').append('<li>' + task + '<span class="remove">×</span></li>');
+                $('#taskInput').val('');
+            }
+        }
+        //프롬포트가 아닌 인풋으로 텍스트 기입
+
+        $('#add').click(function(){
+            addTask();
+        });
+
+        $('#taskInput').keypress(function(e){
+            if(e.which === 13){
+                addTask();
+            }
+        });
+        //엔터키 누르면 굳이 버튼을 누르지 않아도 할일이 등록되게 설정//
+        
+        $(document).on('click', '.remove', function(){
+            $(this).parent().remove();
+         });
+
+         $(document).on('click', 'li', function() {
+            $(this).toggleClass('line-through');
+        });
+
+        $('#delete').click(function(){
+            $('.line-through').remove();
+        });
+
+        $('#deleteAll').click(function(){
+            $('.warning').css('display','inline');
+        });
+
+        $('#warnyes').click(function(){
+            $('li').remove();
+            $('.warning').css('display','none');
+        });
+
+        $('#warnno').click(function(){
+            $('.warning').css('display','none');
+        });
+
+        // $('#deleteAll').click(function(){
+        //     $('li').remove();
+        // });
+        //전체 삭제에 팝업창 추가로 코드 수정
+
+
+    });
+</script>
+
+</body>
+</html>
+
+
+
